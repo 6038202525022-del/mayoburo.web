@@ -688,22 +688,21 @@ function setupNewsStack() {
   const container = document.getElementById('newsContainer');
   const toggleWrapper = document.getElementById('newsToggleWrapper');
 
-  const items = Array.from(container.children)
-    .filter(child => child.classList.contains('news-item'));
+  // お知らせをすべて取得
+  const items = Array.from(container.querySelectorAll('.news-item'));
 
   // 最大10件まで保持
   const maxItems = items.slice(0, 10);
 
-  // 既存のスタックを削除
-  const oldStack = document.getElementById('newsStacked');
-  if (oldStack) oldStack.remove();
+  // 一覧の中身をいったん空にする
+  container.innerHTML = '';
 
-  // 最新3件は通常表示
+  // 最新3件を通常表示
   maxItems.slice(0, 3).forEach(item => {
-    container.insertBefore(item, toggleWrapper);
+    container.appendChild(item);
   });
 
-  // 4件目以降をスタック
+  // 4件目以降をスタックに入れる
   if (maxItems.length > 3) {
     const stackWrapper = document.createElement('div');
     stackWrapper.className = 'news-stacked';
@@ -713,12 +712,13 @@ function setupNewsStack() {
       stackWrapper.appendChild(item);
     });
 
-    container.insertBefore(stackWrapper, toggleWrapper);
+    container.appendChild(stackWrapper);
     toggleWrapper.style.display = 'block';
   } else {
     toggleWrapper.style.display = 'none';
   }
 }
+
 
 
     // お知らせスタックの開閉
