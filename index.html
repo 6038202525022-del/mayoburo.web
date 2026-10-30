@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>マヨ風呂</title>
+  <!-- Google Fonts: さわらび明朝 (本文・見出し), Kiwi Maru (ロゴ用可愛いフォント) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&family=Sawarabi+Mincho&display=swap" rel="stylesheet">
+  <style>
+    /* ----------------------------------
+       カラーパレット定義
+       基調: ブラウン & オフホワイト
+       アクセント: 抹茶色
+    ---------------------------------- */
+    :root {
+      --bg-color: #fdfbf7;           /* 温かみのあるオフホワイト */
+      --bg-card: #f5f0e8;            /* カード・背景のやわらかなベージュ */
+      --text-main: #4a3b32;          /* メインのダークブラウン */
+      --text-sub: #786558;           /* サブのミディアムブラウン */
+      --matcha: #6b8e4e;             /* 抹茶色（アクセント） */
+      --matcha-light: #eaf1e5;       /* 抹茶色の淡い背景 */
+      --matcha-hover: #58773e;       /* ホバー時の抹茶色 */
+      --border-color: #e2d9cd;       /* ボーダー色 */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Sawarabi Mincho', serif;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    /* コンテナ */
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ----------------------------------
+       フェードインアニメーション
+    ---------------------------------- */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .fade-in.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ----------------------------------
+       ヘッダー (左上ロゴのみ)
+    ---------------------------------- */
+    header {
+      padding: 30px 0 20px;
+    }
+
+    .header-inner {
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+    }
+
+    .logo-text {
+      font-family: 'Kiwi Maru', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-text::before {
+      content: "♨";
+      font-size: 1.6rem;
+      color: var(--matcha);
+    }
+
+    /* ----------------------------------
+       セクション共通
+    ---------------------------------- */
+    section {
+      padding: 40px 0;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      text-align: center;
+      margin-bottom: 36px;
+      position: relative;
+      color: var(--text-main);
+    }
+
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 36px;
+      height: 3px;
+      background-color: var(--matcha);
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    /* ----------------------------------
+       ゲームを遊ぶ（メインカード）
+    ---------------------------------- */
+    .game-main-card {
+      background-color: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 36px;
+      box-shadow: 0 4px 20px rgba(74, 59, 50, 0.05);
+      text-align: center;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .game-main-card:hover {
+      border-color: var(--matcha);
+      box-shadow: 0 6px 24px rgba(74, 59, 50, 0.08);
+    }
+
+    .game-title {
+      font-size: 1.6rem;
+      font-weight: bold;
+      color: var(--text-main);
+      margin-bottom: 20px;
+    }
+
+    .game-description {
+      background-color: var(--bg-card);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 28px;
+      text-align: left;
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text-main);
+      border: 1px solid var(--border-color);
+    }
+
+    .game-description h3 {
+      font-size: 1.1rem;
+      color: var(--matcha);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .game-play-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      max-width: 360px;
+      padding: 16px 24px;
+      background-color: var(--matcha);
+      color: #ffffff;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      box-shadow: 0 4px 12px rgba(107, 142, 78, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .game-play-btn:hover {
+      background-color: var(--matcha-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(107, 142, 78, 0.4);
+      color: #ffffff;
+    }
+
+    .game-play-btn .icon {
+      font-size: 1.2rem;
+    }
+
+    /* ----------------------------------
+       アップデート・お知らせ
+    ---------------------------------- */
+    .news-list {
+      background-color: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(74, 59, 50, 0.03);
+    }
+
+    .news-item {
+      display: flex;
+      align-items: center;
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+    }
+
+    .news-item:last-child {
+      border-bottom: none;
+    }
+
+    .news-item:hover {
+      background-color: var(--matcha-light);
+    }
+
+    .news-date {
+      font-size: 0.85rem;
+      color: var(--text-sub);
+      width: 110px;
+      flex-shrink: 0;
+    }
+
+    .news-tag {
+      font-size: 0.75rem;
+      background-color: var(--matcha-light);
+      color: var(--matcha);
+      padding: 2px 10px;
+      border-radius: 12px;
+      margin-right: 16px;
+      flex-shrink: 0;
+      font-weight: bold;
+    }
+
+    .news-tag.update {
+      background-color: #e5ece0;
+      color: #4e7336;
+    }
+
+    .news-title {
+      flex: 1;
+      font-size: 0.95rem;
+      color: var(--text-main);
+    }
+
+    /* スタック（隠し領域）設定 */
+    .news-stacked {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease-in-out;
+    }
+
+    .news-stacked.is-open {
+      max-height: 800px;
+    }
+
+    /* アコーディオン切り替えボタン */
+    .news-toggle-wrapper {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .news-toggle-btn {
+      background-color: transparent;
+      border: 1px solid var(--matcha);
+      color: var(--matcha);
+      padding: 10px 28px;
+      border-radius: 24px;
+      font-family: 'Sawarabi Mincho', serif;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .news-toggle-btn:hover {
+      background-color: var(--matcha);
+      color: #ffffff;
+    }
+
+    .news-toggle-btn .arrow {
+      display: inline-block;
+      transition: transform 0.3s ease;
+    }
+
+    .news-toggle-btn.is-open .arrow {
+      transform: rotate(180deg);
+    }
+
+    /* ----------------------------------
+       お知らせ詳細モーダル (Modal)
+    ---------------------------------- */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(74, 59, 50, 0.4);
+      backdrop-filter: blur(3px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+      padding: 20px;
+    }
+
+    .modal-overlay.is-active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-content {
+      background-color: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      width: 100%;
+      max-width: 650px;
+      max-height: 85vh;
+      overflow-y: auto;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(74, 59, 50, 0.15);
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      position: relative;
+    }
+
+    .modal-overlay.is-active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--text-main);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .modal-body {
+      font-size: 0.95rem;
+      line-height: 1.9;
+      color: var(--text-main);
+    }
+
+    .modal-body p {
+      margin-bottom: 1em;
+    }
+
+    .modal-body ul {
+      margin-left: 20px;
+      margin-bottom: 1em;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      padding: 4px 8px;
+      line-height: 1;
+      border-radius: 50%;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background-color: var(--matcha-light);
+      color: var(--matcha);
+    }
+
+    /* ----------------------------------
+       お問い合わせ（Gmail直飛びシンプル版）
+    ---------------------------------- */
+    .contact-card {
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 36px 24px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(74, 59, 50, 0.03);
+    }
+
+    .contact-text {
+      font-size: 0.95rem;
+      color: var(--text-sub);
+      margin-bottom: 24px;
+      line-height: 1.8;
+    }
+
+    .mail-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      max-width: 320px;
+      padding: 16px 24px;
+      background-color: var(--matcha);
+      color: #ffffff;
+      font-size: 1rem;
+      font-weight: bold;
+      border-radius: 30px;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(107, 142, 78, 0.25);
+    }
+
+    .mail-btn:hover {
+      background-color: var(--matcha-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 14px rgba(107, 142, 78, 0.35);
+      color: #ffffff;
+    }
+
+    /* ----------------------------------
+       フッター
+    ---------------------------------- */
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 30px 0;
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .copyright {
+      font-size: 0.8rem;
+      color: var(--text-sub);
+    }
+
+    /* レスポンシブ調整 */
+    @media (max-width: 600px) {
+      .game-main-card {
+        padding: 24px 18px;
+      }
+
+      .news-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+      }
+
+      .news-date {
+        width: auto;
+      }
+
+      .contact-card {
+        padding: 28px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ロゴ (左上) -->
+  <header class="fade-in">
+    <div class="container header-inner">
+      <a href="#" class="logo-text">マヨ風呂</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- ゲームを遊ぶ (大きな1枚のカード + ゲーム概要) -->
+    <section id="game-sites" class="fade-in">
+      <div class="container">
+        <h2 class="section-title">ゲームを遊ぶ</h2>
+        
+        <div class="game-main-card">
+          <h3 class="game-title">マヨ風呂 - Mayonnaise Bath -</h3>
+          
+          <!-- ゲーム概要 -->
+          <div class="game-description">
+            <h3>♨ ゲーム概要</h3>
+            <p>
+              まったり温かい「マヨ風呂」の世界へようこそ！<br>
+              本作は、日常の喧騒を離れてまったり楽しめるカジュアルアクション・パズルゲームです。<br>
+              お湯を張って、具材を浮かべて、不思議で温かいお風呂を完成させましょう。短時間で気軽に遊べるブラウザゲームです。
+            </p>
+          </div>
+
+          <!-- プレイボタン（unityroomなどのURLを設定） -->
+          <a href="https://unityroom.com/" class="game-play-btn" target="_blank" rel="noopener">
+            <span>unityroom で今すぐ遊ぶ</span>
+            <span class="icon">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- アップデート・お知らせ (自動で最新3件表示＋残りスタック) -->
+    <section id="news" class="fade-in">
+      <div class="container">
+        <h2 class="section-title">アップデート・お知らせ</h2>
+
+        <!-- 
+          【お知らせの追加方法】
+          `<div class="news-list" id="newsContainer">` の先頭（一番上）に
+          `<div class="news-item" onclick="openNewsModal(this)">...</div>` を追加するだけで
+          自動的に最新3件＋スタックに整えられます。
+        -->
+        <div class="news-list" id="newsContainer">
+
+          <!-- 新しいお知らせは一番上に追加 -->
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.10.30</span>
+            <span class="news-tag update">アプデ</span>
+            <div class="news-title">Ver 1.2.0 アプデ配信（新ステージ追加＆不具合修正）</div>
+            <template class="news-detail-template">
+              <p>いつも「マヨ風呂」をプレイしていただきありがとうございます！<br>Ver 1.2.0 アップデートを配信いたしました。</p>
+              <h4 style="color:var(--matcha); margin:12px 0 6px;">【更新内容】</h4>
+              <ul>
+                <li>新エリア「抹茶の湯」を追加しました。</li>
+                <li>一部端末で発生していた描画チラつきの不具合を修正。</li>
+                <li>操作ボタンの判定範囲を少し広げました。</li>
+              </ul>
+              <p>引き続きご意見・ご感想をお待ちしております！</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.10.20</span>
+            <span class="news-tag update">アプデ</span>
+            <div class="news-title">Ver 1.1.1 軽微なバランス調整を行いました</div>
+            <template class="news-detail-template">
+              <p>ステージ3の難易度調整および軽微なバグ修正を行いました。</p>
+              <p>・障害物の出現タイマーを少し緩和<br>・リトライ時のロード速度を改善</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.10.01</span>
+            <span class="news-tag">お知らせ</span>
+            <div class="news-title">「マヨ風呂」ゲーム公開・サイト開設のお知らせ</div>
+            <template class="news-detail-template">
+              <p>まったり温かいWebゲーム「マヨ風呂」を公開いたしました！<br>unityroomにてブラウザからそのまま即プレイ可能です。</p>
+              <p>不具合やご意見は本サイトのお問い合わせフォームよりお寄せください。</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.09.25</span>
+            <span class="news-tag update">アプデ</span>
+            <div class="news-title">Ver 1.0.2 操作性の改善アップデート</div>
+            <template class="news-detail-template">
+              <p>スマートフォン閲覧時のスワイプ感度とボタンの配置を最適化しました。</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.09.15</span>
+            <span class="news-tag">お知らせ</span>
+            <div class="news-title">ご意見・不具合報告フォームを設置しました</div>
+            <template class="news-detail-template">
+              <p>公式サイト内にプレイヤーの皆様からのフィードバックを受け付ける専用フォームを開設しました。</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.09.01</span>
+            <span class="news-tag update">アプデ</span>
+            <div class="news-title">Ver 1.0.1 修正パッチの適用</div>
+            <template class="news-detail-template">
+              <p>特定条件下でスコアが正しく加算されない不具合を修正いたしました。</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.08.20</span>
+            <span class="news-tag">お知らせ</span>
+            <div class="news-title">体験版の配信を開始いたしました</div>
+            <template class="news-detail-template">
+              <p>開発中のテストバージョンを一部先行公開いたしました。</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.08.10</span>
+            <span class="news-tag">日記</span>
+            <div class="news-title">開発裏話：効果音とBGMのこだわりについて</div>
+            <template class="news-detail-template">
+              <p>お風呂の「ぽちゃん」という音やBGMの楽器選定についての開発裏話を掲載しています。</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.07.25</span>
+            <span class="news-tag">お知らせ</span>
+            <div class="news-title">事前登録・公式Twitter（X）開始</div>
+            <template class="news-detail-template">
+              <p>開発状況をリアルタイムでお届けする公式SNSを開設しました。</p>
+            </template>
+          </div>
+
+          <div class="news-item" onclick="openNewsModal(this)">
+            <span class="news-date">2026.07.01</span>
+            <span class="news-tag">日記</span>
+            <div class="news-title">「マヨ風呂」ゲーム制作プロジェクト始動！</div>
+            <template class="news-detail-template">
+              <p>「マヨ風呂」の企画立案・開発を開始しました。</p>
+            </template>
+          </div>
+
+        </div>
+
+        <!-- アコーディオンボタン (項目が4個以上の時のみ表示) -->
+        <div class="news-toggle-wrapper" id="newsToggleWrapper">
+          <button class="news-toggle-btn" id="newsToggleBtn" onclick="toggleNews()">
+            <span id="btnText">過去のお知らせをすべて見る</span>
+            <span class="arrow">▼</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- モーダル（お知らせ詳細表示用） -->
+    <div class="modal-overlay" id="newsModal" onclick="closeNewsModal(event)">
+      <div class="modal-content">
+        <button class="modal-close-btn" onclick="closeNewsModal(event, true)">&times;</button>
+        <div class="modal-header">
+          <span class="news-date" id="modalDate"></span>
+          <span class="news-tag" id="modalTag"></span>
+        </div>
+        <h3 class="modal-title" id="modalTitle"></h3>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+    </div>
+
+    <!-- ご意見・お問い合わせ（Gmailサイト直飛びシンプル仕様） -->
+    <section id="contact" class="fade-in">
+      <div class="container">
+        <h2 class="section-title">ご意見・お問い合わせ</h2>
+        <div class="contact-card">
+          <p class="contact-text">
+            ゲームのご感想や不具合のご報告は、<br>
+            下記ボタンよりGmailにてお気軽にご連絡ください。
+          </p>
+
+          <a href="https://mail.google.com/" class="mail-btn" target="_blank" rel="noopener">
+            <span>✉ Gmailを開く</span>
+            <span class="icon">↗</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- フッター -->
+  <footer>
+    <div class="container">
+      <p class="copyright">&copy; 2026 マヨ風呂. All Rights Reserved.</p>
+    </div>
+  </footer>
+
+  <!-- JS: フェードイン & 自動スタック組み込み & モーダル制御 -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // フェードインアニメーション
+      const fadeElements = document.querySelectorAll('.fade-in');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+          }
+        });
+      }, { threshold: 0.1 });
+
+      fadeElements.forEach(el => observer.observe(el));
+
+      // お知らせ一覧の自動スタック構成化
+      setupNewsStack();
+    });
+
+    // お知らせを最新3件＋残りはスタック枠に自動振り分け
+    function setupNewsStack() {
+      const container = document.getElementById('newsContainer');
+      const items = Array.from(container.children).filter(child => child.classList.contains('news-item'));
+      
+      // 最大10件まで保持
+      const maxItems = items.slice(0, 10);
+      
+      // 既存のコンテンツを一度クリア
+      container.innerHTML = '';
+
+      // 最新3件は直下に追加
+      maxItems.slice(0, 3).forEach(item => container.appendChild(item));
+
+      // 4件目以降があればスタックコンテナを作って格納
+      if (maxItems.length > 3) {
+        const stackWrapper = document.createElement('div');
+        stackWrapper.className = 'news-stacked';
+        stackWrapper.id = 'newsStacked';
+
+        maxItems.slice(3).forEach(item => stackWrapper.appendChild(item));
+        container.appendChild(stackWrapper);
+      } else {
+        // 3件以下の場合はボタン非表示
+        const toggleWrapper = document.getElementById('newsToggleWrapper');
+        if (toggleWrapper) toggleWrapper.style.display = 'none';
+      }
+    }
+
+    // お知らせスタックの開閉
+    function toggleNews() {
+      const stackedNews = document.getElementById('newsStacked');
+      const toggleBtn = document.getElementById('newsToggleBtn');
+      const btnText = document.getElementById('btnText');
+
+      if (!stackedNews) return;
+
+      const isOpen = stackedNews.classList.toggle('is-open');
+      toggleBtn.classList.toggle('is-open');
+
+      if (isOpen) {
+        btnText.textContent = '閉じる';
+      } else {
+        btnText.textContent = '過去のお知らせをすべて見る';
+      }
+    }
+
+    // モーダルで詳細を開く
+    function openNewsModal(element) {
+      const date = element.querySelector('.news-date').textContent;
+      const tag = element.querySelector('.news-tag');
+      const title = element.querySelector('.news-title').textContent;
+      const template = element.querySelector('.news-detail-template');
+
+      document.getElementById('modalDate').textContent = date;
+      
+      const modalTag = document.getElementById('modalTag');
+      modalTag.textContent = tag.textContent;
+      modalTag.className = tag.className;
+
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalBody').innerHTML = template ? template.innerHTML : '<p>詳細はありません。</p>';
+
+      const modal = document.getElementById('newsModal');
+      modal.classList.add('is-active');
+      document.body.style.overflow = 'hidden'; // 背面スクロール防止
+    }
+
+    // モーダルを閉じる
+    function closeNewsModal(event, forceClose = false) {
+      if (forceClose || event.target.id === 'newsModal') {
+        const modal = document.getElementById('newsModal');
+        modal.classList.remove('is-active');
+        document.body.style.overflow = '';
+      }
+    }
+  </script>
+</body>
+</html>
