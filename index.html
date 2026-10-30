@@ -895,7 +895,6 @@
               <span>♨</span>
               <span>みんなの意見箱</span>
             </div>
-            <button type="button" class="clear-opinions-btn" onclick="clearOpinions()">投稿をリセット</button>
           </div>
           <div class="opinion-list" id="opinionList">
             <!-- JSで動的に投稿が表示されます -->
@@ -1220,6 +1219,7 @@
       if (opinions.length > 0) {
         const lastOp = opinions[0];
         if (lastOp.clientId === myClientId && lastOp.message.trim() === message) {
+          // 直前の投稿も併せて削除
           opinions = opinions.filter(op => op.id !== lastOp.id);
           safeSetStorage('mayo_opinions', JSON.stringify(opinions));
           renderOpinions();
@@ -1237,9 +1237,10 @@
       const myHistory10s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 10000);
       const myHistory30s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 30000);
 
-      // 判定 3: 10秒間に3個以上送った場合 (2時間ブロック)
+      // 判定 3: 10秒間に3個以上送った場合 (2時間ブロック & 最初のスパム投稿含め全削除)
       if (myHistory10s.length >= 3) {
         const firstSpamTime = myHistory10s[0].timestamp;
+        // 該当クライアントの最初のスパム投稿日時(firstSpamTime)以降の投稿をすべて削除
         opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
         safeSetStorage('mayo_opinions', JSON.stringify(opinions));
         renderOpinions();
@@ -1250,9 +1251,10 @@
         return;
       }
 
-      // 判定 2 & 4: 30秒間に5個以上送られた場合 (30分ブロック)
+      // 判定 2 & 4: 30秒間に5個以上送られた場合 (30分ブロック & 最初のスパム投稿含め全削除)
       if (myHistory30s.length >= 5) {
         const firstSpamTime = myHistory30s[0].timestamp;
+        // 該当クライアントの最初のスパム投稿日時(firstSpamTime)以降の投稿をすべて削除
         opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
         safeSetStorage('mayo_opinions', JSON.stringify(opinions));
         renderOpinions();
@@ -1282,15 +1284,6 @@
       document.getElementById('opMessage').value = '';
       const sticker = document.getElementById('spamWarningSticker');
       if (sticker) sticker.classList.remove('is-active');
-      renderOpinions();
-    }
-
-    function clearOpinions() {
-      safeRemoveStorage('mayo_opinions');
-      safeRemoveStorage('mayo_submit_history');
-      safeRemoveStorage('mayo_block_until');
-      safeRemoveStorage('mayo_block_reason');
-      updateStickerDisplay();
       renderOpinions();
     }
 
