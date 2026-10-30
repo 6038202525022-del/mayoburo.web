@@ -4,10 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>マヨ風呂 with rice</title>
-  <!-- Google Fonts: さわらび明朝 (本文・見出し), Kiwi Maru (ロゴ用可愛いフォント) -->
+  <!-- Google Fonts: さわらび明朝 (本文・見出し), Kiwi Maru (ロゴ用フォント) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@400;500;700&family=Sawarabi+Mincho&display=swap" rel="stylesheet">
   <style>
     /* ----------------------------------
        カラーパレット定義
@@ -72,7 +72,7 @@
     }
 
     /* ----------------------------------
-       ヘッダー (左上ロゴのみ)
+       ヘッダー (左上ロゴ)
     ---------------------------------- */
     header {
       padding: 30px 0 20px;
@@ -303,6 +303,276 @@
     }
 
     /* ----------------------------------
+       お問い合わせ・ご意見フォーム
+    ---------------------------------- */
+    .contact-card {
+      background-color: #ffffff;
+      border: 2px solid var(--border-color);
+      border-radius: 16px;
+      padding: 32px 28px;
+      box-shadow: 0 8px 24px rgba(74, 59, 50, 0.06);
+      margin-bottom: 28px;
+      position: relative;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+      color: var(--text-main);
+      font-weight: bold;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+      width: 100%;
+      padding: 14px 18px;
+      border: 2px solid var(--border-color);
+      border-radius: 10px;
+      background-color: #ffffff;
+      font-family: 'Sawarabi Mincho', serif;
+      font-size: 1.05rem;
+      color: #2b211b;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .form-select {
+      height: 52px;
+      cursor: pointer;
+      line-height: 1.5;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+      outline: none;
+      border-color: var(--matcha);
+      box-shadow: 0 0 0 4px rgba(107, 142, 78, 0.2);
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 120px;
+    }
+
+    .submit-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px;
+      background-color: var(--matcha);
+      color: #ffffff;
+      border: none;
+      border-radius: 10px;
+      font-family: 'Sawarabi Mincho', serif;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(107, 142, 78, 0.25);
+    }
+
+    .submit-btn:hover {
+      background-color: var(--matcha-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(107, 142, 78, 0.35);
+    }
+
+    /* ----------------------------------
+       スパム警告ステッカー (目立つ和モダンデザイン)
+    ---------------------------------- */
+    .spam-warning-sticker {
+      display: none;
+      align-items: center;
+      gap: 14px;
+      margin-top: 16px;
+      padding: 16px 20px;
+      background: linear-gradient(135deg, #fff2e8 0%, #ffe3d1 100%);
+      border: 2px dashed #e65100;
+      border-radius: 14px;
+      box-shadow: 0 6px 16px rgba(230, 81, 0, 0.18);
+      animation: stickerPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spam-warning-sticker::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 6px;
+      height: 100%;
+      background-color: #d97706;
+    }
+
+    .spam-warning-sticker.is-active {
+      display: flex;
+    }
+
+    @keyframes stickerPop {
+      0% {
+        opacity: 0;
+        transform: scale(0.9) translateY(-8px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .sticker-badge {
+      background-color: #d97706;
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: bold;
+      padding: 6px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      box-shadow: 0 3px 8px rgba(217, 119, 6, 0.35);
+      animation: pulseGlow 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 3px 8px rgba(217, 119, 6, 0.35);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.55);
+      }
+    }
+
+    .sticker-text {
+      font-size: 0.95rem;
+      color: #7c2d12;
+      line-height: 1.5;
+      font-weight: bold;
+    }
+
+    /* 意見箱リスト */
+    .opinion-box-container {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 28px;
+    }
+
+    .opinion-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .opinion-box-title {
+      font-size: 1.15rem;
+      color: var(--text-main);
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .clear-opinions-btn {
+      background: transparent;
+      border: 1px solid var(--text-sub);
+      color: var(--text-sub);
+      padding: 4px 12px;
+      border-radius: 16px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      font-family: 'Sawarabi Mincho', serif;
+      transition: all 0.2s ease;
+    }
+
+    .clear-opinions-btn:hover {
+      background-color: var(--text-sub);
+      color: #ffffff;
+    }
+
+    .opinion-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-height: 500px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .opinion-card {
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(74, 59, 50, 0.02);
+      transition: transform 0.2s ease;
+    }
+
+    .opinion-card:hover {
+      transform: translateY(-1px);
+    }
+
+    .opinion-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .opinion-user {
+      font-weight: bold;
+      color: var(--text-main);
+    }
+
+    .opinion-category {
+      background-color: var(--matcha-light);
+      color: var(--matcha);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.75rem;
+      font-weight: bold;
+    }
+
+    .opinion-category.bug {
+      background-color: #fde8e8;
+      color: #c53030;
+    }
+
+    .opinion-text {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    .opinion-empty {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 0.9rem;
+      padding: 30px 0;
+    }
+
+    /* ----------------------------------
        お知らせ詳細モーダル (Modal)
     ---------------------------------- */
     .modal-overlay {
@@ -400,49 +670,6 @@
     }
 
     /* ----------------------------------
-       お問い合わせ（Gmail直飛びシンプル版）
-    ---------------------------------- */
-    .contact-card {
-      background-color: #ffffff;
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 36px 24px;
-      text-align: center;
-      box-shadow: 0 2px 12px rgba(74, 59, 50, 0.03);
-    }
-
-    .contact-text {
-      font-size: 0.95rem;
-      color: var(--text-sub);
-      margin-bottom: 24px;
-      line-height: 1.8;
-    }
-
-    .mail-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      width: 100%;
-      max-width: 320px;
-      padding: 16px 24px;
-      background-color: var(--matcha);
-      color: #ffffff;
-      font-size: 1rem;
-      font-weight: bold;
-      border-radius: 30px;
-      transition: all 0.3s ease;
-      box-shadow: 0 3px 10px rgba(107, 142, 78, 0.25);
-    }
-
-    .mail-btn:hover {
-      background-color: var(--matcha-hover);
-      transform: translateY(-2px);
-      box-shadow: 0 5px 14px rgba(107, 142, 78, 0.35);
-      color: #ffffff;
-    }
-
-    /* ----------------------------------
        フッター
     ---------------------------------- */
     footer {
@@ -473,8 +700,9 @@
         width: auto;
       }
 
-      .contact-card {
-        padding: 28px 16px;
+      .contact-card,
+      .opinion-box-container {
+        padding: 20px 16px;
       }
     }
   </style>
@@ -507,7 +735,7 @@
             </p>
           </div>
 
-          <!-- プレイボタン（unityroomなどのURLを設定） -->
+          <!-- プレイボタン -->
           <a href="https://6038202525022-del.github.io/horse_game/" class="game-play-btn" target="_blank" rel="noopener">
             <span>今すぐ遊ぶ</span>
             <span class="icon">↗</span>
@@ -521,16 +749,10 @@
       <div class="container">
         <h2 class="section-title">アップデート・お知らせ</h2>
 
-        <!-- 
-          【お知らせの追加方法】
-          `<div class="news-list" id="newsContainer">` の先頭（一番上）に
-          `<div class="news-item" onclick="openNewsModal(this)">...</div>` を追加するだけで
-          自動的に最新3件＋スタックに整えられます。
-        -->
         <div class="news-list" id="newsContainer">
 
           <!-- 新しいお知らせは一番上に追加 -->
-        　<div class="news-item" onclick="openNewsModal(this)">
+          <div class="news-item" onclick="openNewsModal(this)">
             <span class="news-date">2026.10.30</span>
             <span class="news-tag">お知らせ</span>
             <div class="news-title">模試のためサイトを停止します</div>
@@ -612,7 +834,8 @@
             </template>
           </div>
           
-        </div> <!-- お知らせの四角い枠をここで閉じる -->
+        </div>
+
         <!-- アコーディオンボタン -->
         <div class="news-toggle-wrapper" id="newsToggleWrapper">
           <button class="news-toggle-btn" id="newsToggleBtn" onclick="toggleNews()">
@@ -624,37 +847,77 @@
       </div>
     </section>
 
-    <!-- モーダル（お知らせ詳細表示用） -->
-    <div class="modal-overlay" id="newsModal" onclick="closeNewsModal(event)">
-      <div class="modal-content">
-        <button class="modal-close-btn" onclick="closeNewsModal(event, true)">&times;</button>
-        <div class="modal-header">
-          <span class="news-date" id="modalDate"></span>
-          <span class="news-tag" id="modalTag"></span>
-        </div>
-        <h3 class="modal-title" id="modalTitle"></h3>
-        <div class="modal-body" id="modalBody"></div>
-      </div>
-    </div>
-
-    <!-- ご意見・お問い合わせ（Gmailサイト直飛びシンプル仕様） -->
+    <!-- ご意見・お問い合わせ (サイト内意見箱 & スパム保護) -->
     <section id="contact" class="fade-in">
       <div class="container">
         <h2 class="section-title">ご意見・お問い合わせ</h2>
+        
+        <!-- 投稿用フォーム -->
         <div class="contact-card">
-          <p class="contact-text">
-            ゲームのご感想や不具合のご報告は、<br>
-            下記ボタンよりGmailにてお気軽にご連絡ください。
-          </p>
-
-          <a href="https://mail.google.com/" class="mail-btn" target="_blank" rel="noopener">
-            <span>✉ Gmailを開く</span>
-            <span class="icon">↗</span>
-          </a>
+          <form id="opinionForm" onsubmit="handleOpinionSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="opCategory">種別</label>
+              <select class="form-select" id="opCategory">
+                <option value="ご意見・ご感想">ご意見・ご感想</option>
+                <option value="不具合報告">不具合報告</option>
+                <option value="その他">その他</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="opName">お名前（任意）</label>
+              <input class="form-input" type="text" id="opName" placeholder="匿名マヨ">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="opMessage">ご意見・ご感想メッセージ</label>
+              <textarea class="form-textarea" id="opMessage" placeholder="ここに自由にご意見や不具合をご記入ください" required></textarea>
+              
+              <!-- 投稿制限時のモダン警告ステッカー -->
+              <div class="spam-warning-sticker" id="spamWarningSticker">
+                <div class="sticker-badge">
+                  <span>♨</span>
+                  <span>制限中</span>
+                </div>
+                <div class="sticker-text" id="stickerText">
+                  スパム保護のため一時的に投稿が制限されています。
+                </div>
+              </div>
+            </div>
+            <button type="submit" class="submit-btn" id="opSubmitBtn">
+              <span>意見箱に投稿する</span>
+            </button>
+          </form>
         </div>
+
+        <!-- 投稿された意見の一覧（みんなの意見箱） -->
+        <div class="opinion-box-container">
+          <div class="opinion-box-header">
+            <div class="opinion-box-title">
+              <span>♨</span>
+              <span>みんなの意見箱</span>
+            </div>
+            <button type="button" class="clear-opinions-btn" onclick="clearOpinions()">投稿をリセット</button>
+          </div>
+          <div class="opinion-list" id="opinionList">
+            <!-- JSで動的に投稿が表示されます -->
+          </div>
+        </div>
+
       </div>
     </section>
   </main>
+
+  <!-- モーダル（お知らせ詳細表示用） -->
+  <div class="modal-overlay" id="newsModal" onclick="closeNewsModal(event)">
+    <div class="modal-content">
+      <button class="modal-close-btn" onclick="closeNewsModal(event, true)">&times;</button>
+      <div class="modal-header">
+        <span class="news-date" id="modalDate"></span>
+        <span class="news-tag" id="modalTag"></span>
+      </div>
+      <h3 class="modal-title" id="modalTitle"></h3>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
 
   <!-- フッター -->
   <footer>
@@ -663,8 +926,38 @@
     </div>
   </footer>
 
-  <!-- JS: フェードイン & 自動スタック組み込み & モーダル制御 -->
+  <!-- JS: フェードイン & 自動スタック & モーダル & アンチスパム意見箱 -->
   <script>
+    // サンプル初期投稿データ
+    const DEFAULT_OPINIONS = [
+      {
+        id: 1,
+        name: "温泉好きマヨ",
+        category: "ご意見・ご感想",
+        message: "世界観がかわいくて癒やされます！応援しています。",
+        date: "2026/10/30 18:20",
+        clientId: "sample-user-1"
+      },
+      {
+        id: 2,
+        name: "名無しさん",
+        category: "不具合報告",
+        message: "Ver 3.0のアプデありがとうございます！楽しく遊んでます。",
+        date: "2026/10/30 20:05",
+        clientId: "sample-user-2"
+      }
+    ];
+
+    // ブラウザ固有のクライアントID（同一送信元判定用）
+    function getClientId() {
+      let id = localStorage.getItem('mayo_client_id');
+      if (!id) {
+        id = 'client_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+        localStorage.setItem('mayo_client_id', id);
+      }
+      return id;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       // フェードインアニメーション
       const fadeElements = document.querySelectorAll('.fade-in');
@@ -680,46 +973,44 @@
 
       // お知らせ一覧の自動スタック構成化
       setupNewsStack();
+
+      // 意見箱の描画
+      renderOpinions();
+
+      // 初期制限状態チェック
+      updateStickerDisplay();
     });
 
     // お知らせを最新3件＋残りはスタック枠に自動振り分け
+    function setupNewsStack() {
+      const container = document.getElementById('newsContainer');
+      const toggleWrapper = document.getElementById('newsToggleWrapper');
+      if (!container) return;
 
-function setupNewsStack() {
-  const container = document.getElementById('newsContainer');
-  const toggleWrapper = document.getElementById('newsToggleWrapper');
+      const items = Array.from(container.querySelectorAll('.news-item'));
+      const maxItems = items.slice(0, 10);
 
-  // お知らせをすべて取得
-  const items = Array.from(container.querySelectorAll('.news-item'));
+      container.innerHTML = '';
 
-  // 最大10件まで保持
-  const maxItems = items.slice(0, 10);
+      maxItems.slice(0, 3).forEach(item => {
+        container.appendChild(item);
+      });
 
-  // 一覧の中身をいったん空にする
-  container.innerHTML = '';
+      if (maxItems.length > 3) {
+        const stackWrapper = document.createElement('div');
+        stackWrapper.className = 'news-stacked';
+        stackWrapper.id = 'newsStacked';
 
-  // 最新3件を通常表示
-  maxItems.slice(0, 3).forEach(item => {
-    container.appendChild(item);
-  });
+        maxItems.slice(3).forEach(item => {
+          stackWrapper.appendChild(item);
+        });
 
-  // 4件目以降をスタックに入れる
-  if (maxItems.length > 3) {
-    const stackWrapper = document.createElement('div');
-    stackWrapper.className = 'news-stacked';
-    stackWrapper.id = 'newsStacked';
-
-    maxItems.slice(3).forEach(item => {
-      stackWrapper.appendChild(item);
-    });
-
-    container.appendChild(stackWrapper);
-    toggleWrapper.style.display = 'block';
-  } else {
-    toggleWrapper.style.display = 'none';
-  }
-}
-
-
+        container.appendChild(stackWrapper);
+        if (toggleWrapper) toggleWrapper.style.display = 'block';
+      } else {
+        if (toggleWrapper) toggleWrapper.style.display = 'none';
+      }
+    }
 
     // お知らせスタックの開閉
     function toggleNews() {
@@ -757,7 +1048,7 @@ function setupNewsStack() {
 
       const modal = document.getElementById('newsModal');
       modal.classList.add('is-active');
-      document.body.style.overflow = 'hidden'; // 背面スクロール防止
+      document.body.style.overflow = 'hidden';
     }
 
     // モーダルを閉じる
@@ -767,6 +1058,217 @@ function setupNewsStack() {
         modal.classList.remove('is-active');
         document.body.style.overflow = '';
       }
+    }
+
+    /* ----------------------------------
+       みんなの意見箱 (厳格なスパムフィルター＆投稿規制)
+    ---------------------------------- */
+    function getStoredOpinions() {
+      const data = localStorage.getItem('mayo_opinions');
+      let opinions = DEFAULT_OPINIONS;
+      if (data) {
+        try {
+          opinions = JSON.parse(data);
+        } catch (e) {
+          opinions = DEFAULT_OPINIONS;
+        }
+      }
+      return opinions;
+    }
+
+    function getSubmitHistory() {
+      const data = localStorage.getItem('mayo_submit_history');
+      return data ? JSON.parse(data) : [];
+    }
+
+    function setBlockUntil(minutes) {
+      const blockTime = Date.now() + minutes * 60 * 1000;
+      localStorage.setItem('mayo_block_until', blockTime.toString());
+    }
+
+    function checkBlockStatus() {
+      const blockTime = localStorage.getItem('mayo_block_until');
+      if (blockTime) {
+        const remainingMs = parseInt(blockTime, 10) - Date.now();
+        if (remainingMs > 0) {
+          return Math.ceil(remainingMs / (60 * 1000));
+        } else {
+          localStorage.removeItem('mayo_block_until');
+        }
+      }
+      return 0;
+    }
+
+    function updateStickerDisplay() {
+      const sticker = document.getElementById('spamWarningSticker');
+      const stickerText = document.getElementById('stickerText');
+      const submitBtn = document.getElementById('opSubmitBtn');
+      const textarea = document.getElementById('opMessage');
+
+      const blockedMins = checkBlockStatus();
+      if (blockedMins > 0) {
+        if (stickerText) {
+          stickerText.innerHTML = `連投・パターン検知のため制限中（解除まで あと約 <strong>${blockedMins} 分</strong>）`;
+        }
+        if (sticker) sticker.classList.add('is-active');
+        if (submitBtn) {
+          submitBtn.disabled = true;
+          submitBtn.style.opacity = '0.6';
+          submitBtn.style.cursor = 'not-allowed';
+        }
+        if (textarea) textarea.disabled = true;
+      } else {
+        if (sticker) sticker.classList.remove('is-active');
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.style.opacity = '1';
+          submitBtn.style.cursor = 'pointer';
+        }
+        if (textarea) textarea.disabled = false;
+      }
+    }
+
+    function renderOpinions() {
+      const opinionList = document.getElementById('opinionList');
+      if (!opinionList) return;
+
+      const opinions = getStoredOpinions();
+
+      if (opinions.length === 0) {
+        opinionList.innerHTML = '<div class="opinion-empty">まだ投稿はありません。最初の意見を投稿してみましょう！</div>';
+        return;
+      }
+
+      opinionList.innerHTML = opinions.map(op => {
+        const isBug = op.category === '不具合報告';
+        return `
+          <div class="opinion-card">
+            <div class="opinion-meta">
+              <div>
+                <span class="opinion-user">${escapeHtml(op.name || '匿名マヨ')}</span>
+                <span class="opinion-category ${isBug ? 'bug' : ''}">${escapeHtml(op.category)}</span>
+              </div>
+              <span>${escapeHtml(op.date)}</span>
+            </div>
+            <div class="opinion-text">${escapeHtml(op.message)}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function handleOpinionSubmit(event) {
+      event.preventDefault();
+
+      const blockedMins = checkBlockStatus();
+      if (blockedMins > 0) {
+        alert(`スパム判定されたため、あと約 ${blockedMins} 分間はコメント投稿できません。`);
+        return;
+      }
+
+      const category = document.getElementById('opCategory').value;
+      const name = document.getElementById('opName').value.trim() || '匿名マヨ';
+      const message = document.getElementById('opMessage').value.trim();
+      const myClientId = getClientId();
+      const now = Date.now();
+
+      if (!message) return;
+
+      // 判定 1: 同じ文字が3文字続く場合（例: あああ, www, !!! など）
+      if (/(.)\1{2,}/.test(message)) {
+        alert('スパム検知: 同じ文字が3文字以上連続して含まれています。表示されません。');
+        return;
+      }
+
+      let opinions = getStoredOpinions();
+      let history = getSubmitHistory().filter(h => now - h.timestamp < 300000);
+
+      // 判定 5: 同じ言葉を連続で2個送った時は両方削除し5分間投稿不可
+      if (opinions.length > 0) {
+        const lastOp = opinions[0];
+        if (lastOp.clientId === myClientId && lastOp.message.trim() === message) {
+          opinions = opinions.filter(op => op.id !== lastOp.id);
+          localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+          renderOpinions();
+
+          setBlockUntil(5);
+          updateStickerDisplay();
+          document.getElementById('opMessage').value = '';
+          alert('スパム判定: 同じ内容が連続投稿されたため、直前の投稿を含め削除しました。5分間コメントできません。');
+          return;
+        }
+      }
+
+      history.push({ timestamp: now, message: message, clientId: myClientId });
+      localStorage.setItem('mayo_submit_history', JSON.stringify(history));
+
+      const myHistory10s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 10000);
+      const myHistory30s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 30000);
+
+      // 判定 3: 10秒間に3個以上送った場合 (2時間ブロック + 最初のスパム投稿以降を全削除)
+      if (myHistory10s.length >= 3) {
+        const firstSpamTime = myHistory10s[0].timestamp;
+        opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
+        localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+        renderOpinions();
+
+        setBlockUntil(120);
+        updateStickerDisplay();
+        document.getElementById('opMessage').value = '';
+        alert('スパム判定: 10秒間に連続送信されたため、スパム開始以降の投稿を全削除しました。2時間コメントできません。');
+        return;
+      }
+
+      // 判定 2 & 4: 30秒間に5個以上送られた場合 (30分ブロック + 最初のスパム投稿以降を全削除)
+      if (myHistory30s.length >= 5) {
+        const firstSpamTime = myHistory30s[0].timestamp;
+        opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
+        localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+        renderOpinions();
+
+        setBlockUntil(30);
+        updateStickerDisplay();
+        document.getElementById('opMessage').value = '';
+        alert('スパム判定: 短時間に大量送信されたため、スパム開始以降の投稿を全削除しました。30分間コメントできません。');
+        return;
+      }
+
+      // 正常投稿
+      const nowDate = new Date();
+      const dateStr = `${nowDate.getFullYear()}/${String(nowDate.getMonth() + 1).padStart(2, '0')}/${String(nowDate.getDate()).padStart(2, '0')} ${String(nowDate.getHours()).padStart(2, '0')}:${String(nowDate.getMinutes()).padStart(2, '0')}`;
+
+      const newOpinion = {
+        id: now,
+        name: name,
+        category: category,
+        message: message,
+        date: dateStr,
+        clientId: myClientId
+      };
+
+      opinions.unshift(newOpinion);
+      localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+
+      document.getElementById('opMessage').value = '';
+      renderOpinions();
+    }
+
+    function clearOpinions() {
+      if (confirm('意見箱の投稿（ローカルデータ）をリセットしますか？')) {
+        localStorage.removeItem('mayo_opinions');
+        localStorage.removeItem('mayo_submit_history');
+        localStorage.removeItem('mayo_block_until');
+        updateStickerDisplay();
+        renderOpinions();
+      }
+    }
+
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
     }
   </script>
 </body>
