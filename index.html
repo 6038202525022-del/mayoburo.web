@@ -948,12 +948,33 @@
       }
     ];
 
+    // 安全なLocalStorageアクセス (Chromebook/保護ブラウザ対応)
+    function safeGetStorage(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function safeSetStorage(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (e) {}
+    }
+
+    function safeRemoveStorage(key) {
+      try {
+        localStorage.removeItem(key);
+      } catch (e) {}
+    }
+
     // ブラウザ固有のクライアントID（同一送信元判定用）
     function getClientId() {
-      let id = localStorage.getItem('mayo_client_id');
+      let id = safeGetStorage('mayo_client_id');
       if (!id) {
         id = 'client_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
-        localStorage.setItem('mayo_client_id', id);
+        safeSetStorage('mayo_client_id', id);
       }
       return id;
     }
@@ -1064,7 +1085,7 @@
        みんなの意見箱 (厳格なスパムフィルター＆投稿規制)
     ---------------------------------- */
     function getStoredOpinions() {
-      const data = localStorage.getItem('mayo_opinions');
+      const data = safeGetStorage('mayo_opinions');
       let opinions = DEFAULT_OPINIONS;
       if (data) {
         try {
@@ -1077,26 +1098,37 @@
     }
 
     function getSubmitHistory() {
-      const data = localStorage.getItem('mayo_submit_history');
+      const data = safeGetStorage('mayo_submit_history');
       return data ? JSON.parse(data) : [];
     }
 
-    function setBlockUntil(minutes) {
+    function setBlockUntil(minutes, reasonText) {
       const blockTime = Date.now() + minutes * 60 * 1000;
-      localStorage.setItem('mayo_block_until', blockTime.toString());
+      safeSetStorage('mayo_block_until', blockTime.toString());
+      if (reasonText) {
+        safeSetStorage('mayo_block_reason', reasonText);
+      }
     }
 
     function checkBlockStatus() {
-      const blockTime = localStorage.getItem('mayo_block_until');
+      const blockTime = safeGetStorage('mayo_block_until');
       if (blockTime) {
         const remainingMs = parseInt(blockTime, 10) - Date.now();
         if (remainingMs > 0) {
           return Math.ceil(remainingMs / (60 * 1000));
         } else {
-          localStorage.removeItem('mayo_block_until');
+          safeRemoveStorage('mayo_block_until');
+          safeRemoveStorage('mayo_block_reason');
         }
       }
       return 0;
+    }
+
+    function showInlineStickerMsg(msg, isBlocked = true) {
+      const sticker = document.getElementById('spamWarningSticker');
+      const stickerText = document.getElementById('stickerText');
+      if (stickerText) stickerText.innerHTML = msg;
+      if (sticker) sticker.classList.add('is-active');
     }
 
     function updateStickerDisplay() {
@@ -1106,9 +1138,11 @@
       const textarea = document.getElementById('opMessage');
 
       const blockedMins = checkBlockStatus();
+      const customReason = safeGetStorage('mayo_block_reason') || '連投・パターン検知のため制限中';
+
       if (blockedMins > 0) {
         if (stickerText) {
-          stickerText.innerHTML = `連投・パターン検知のため制限中（解除まで あと約 <strong>${blockedMins} 分</strong>）`;
+          stickerText.innerHTML = `${customReason}（解除まで あと約 <strong>${blockedMins} 分</strong>）`;
         }
         if (sticker) sticker.classList.add('is-active');
         if (submitBtn) {
@@ -1161,7 +1195,7 @@
 
       const blockedMins = checkBlockStatus();
       if (blockedMins > 0) {
-        alert(`スパム判定されたため、あと約 ${blockedMins} 分間はコメント投稿できません。`);
+        updateStickerDisplay();
         return;
       }
 
@@ -1173,9 +1207,9 @@
 
       if (!message) return;
 
-      // 判定 1: 同じ文字が3文字続く場合（例: あああ, www, !!! など）
+      // 判定 1: 同じ文字が3文字続く場合
       if (/(.)\1{2,}/.test(message)) {
-        alert('スパム検知: 同じ文字が3文字以上連続して含まれています。表示されません。');
+        showInlineStickerMsg('【スパム検知】同じ文字が3文字以上連続しています。投稿は拒否されました。');
         return;
       }
 
@@ -1187,48 +1221,45 @@
         const lastOp = opinions[0];
         if (lastOp.clientId === myClientId && lastOp.message.trim() === message) {
           opinions = opinions.filter(op => op.id !== lastOp.id);
-          localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+          safeSetStorage('mayo_opinions', JSON.stringify(opinions));
           renderOpinions();
 
-          setBlockUntil(5);
+          setBlockUntil(5, '同じ内容の連続投稿を検知');
           updateStickerDisplay();
           document.getElementById('opMessage').value = '';
-          alert('スパム判定: 同じ内容が連続投稿されたため、直前の投稿を含め削除しました。5分間コメントできません。');
           return;
         }
       }
 
       history.push({ timestamp: now, message: message, clientId: myClientId });
-      localStorage.setItem('mayo_submit_history', JSON.stringify(history));
+      safeSetStorage('mayo_submit_history', JSON.stringify(history));
 
       const myHistory10s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 10000);
       const myHistory30s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 30000);
 
-      // 判定 3: 10秒間に3個以上送った場合 (2時間ブロック + 最初のスパム投稿以降を全削除)
+      // 判定 3: 10秒間に3個以上送った場合 (2時間ブロック)
       if (myHistory10s.length >= 3) {
         const firstSpamTime = myHistory10s[0].timestamp;
         opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
-        localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+        safeSetStorage('mayo_opinions', JSON.stringify(opinions));
         renderOpinions();
 
-        setBlockUntil(120);
+        setBlockUntil(120, '10秒間の連続送信（スパム）を検知');
         updateStickerDisplay();
         document.getElementById('opMessage').value = '';
-        alert('スパム判定: 10秒間に連続送信されたため、スパム開始以降の投稿を全削除しました。2時間コメントできません。');
         return;
       }
 
-      // 判定 2 & 4: 30秒間に5個以上送られた場合 (30分ブロック + 最初のスパム投稿以降を全削除)
+      // 判定 2 & 4: 30秒間に5個以上送られた場合 (30分ブロック)
       if (myHistory30s.length >= 5) {
         const firstSpamTime = myHistory30s[0].timestamp;
         opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
-        localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+        safeSetStorage('mayo_opinions', JSON.stringify(opinions));
         renderOpinions();
 
-        setBlockUntil(30);
+        setBlockUntil(30, '短時間の大量送信を検知');
         updateStickerDisplay();
         document.getElementById('opMessage').value = '';
-        alert('スパム判定: 短時間に大量送信されたため、スパム開始以降の投稿を全削除しました。30分間コメントできません。');
         return;
       }
 
@@ -1246,20 +1277,21 @@
       };
 
       opinions.unshift(newOpinion);
-      localStorage.setItem('mayo_opinions', JSON.stringify(opinions));
+      safeSetStorage('mayo_opinions', JSON.stringify(opinions));
 
       document.getElementById('opMessage').value = '';
+      const sticker = document.getElementById('spamWarningSticker');
+      if (sticker) sticker.classList.remove('is-active');
       renderOpinions();
     }
 
     function clearOpinions() {
-      if (confirm('意見箱の投稿（ローカルデータ）をリセットしますか？')) {
-        localStorage.removeItem('mayo_opinions');
-        localStorage.removeItem('mayo_submit_history');
-        localStorage.removeItem('mayo_block_until');
-        updateStickerDisplay();
-        renderOpinions();
-      }
+      safeRemoveStorage('mayo_opinions');
+      safeRemoveStorage('mayo_submit_history');
+      safeRemoveStorage('mayo_block_until');
+      safeRemoveStorage('mayo_block_reason');
+      updateStickerDisplay();
+      renderOpinions();
     }
 
     function escapeHtml(str) {
