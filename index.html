@@ -672,33 +672,43 @@
     });
 
     // お知らせを最新3件＋残りはスタック枠に自動振り分け
-    function setupNewsStack() {
-      const container = document.getElementById('newsContainer');
-      const items = Array.from(container.children).filter(child => child.classList.contains('news-item'));
-      
-      // 最大10件まで保持
-      const maxItems = items.slice(0, 10);
-      
-      // 既存のコンテンツを一度クリア
-      container.innerHTML = '';
 
-      // 最新3件は直下に追加
-      maxItems.slice(0, 3).forEach(item => container.appendChild(item));
+function setupNewsStack() {
+  const container = document.getElementById('newsContainer');
+  const toggleWrapper = document.getElementById('newsToggleWrapper');
 
-      // 4件目以降があればスタックコンテナを作って格納
-      if (maxItems.length > 3) {
-        const stackWrapper = document.createElement('div');
-        stackWrapper.className = 'news-stacked';
-        stackWrapper.id = 'newsStacked';
+  const items = Array.from(container.children)
+    .filter(child => child.classList.contains('news-item'));
 
-        maxItems.slice(3).forEach(item => stackWrapper.appendChild(item));
-        container.appendChild(stackWrapper);
-      } else {
-        // 3件以下の場合はボタン非表示
-        const toggleWrapper = document.getElementById('newsToggleWrapper');
-        if (toggleWrapper) toggleWrapper.style.display = 'none';
-      }
-    }
+  // 最大10件まで保持
+  const maxItems = items.slice(0, 10);
+
+  // 既存のスタックを削除
+  const oldStack = document.getElementById('newsStacked');
+  if (oldStack) oldStack.remove();
+
+  // 最新3件は通常表示
+  maxItems.slice(0, 3).forEach(item => {
+    container.insertBefore(item, toggleWrapper);
+  });
+
+  // 4件目以降をスタック
+  if (maxItems.length > 3) {
+    const stackWrapper = document.createElement('div');
+    stackWrapper.className = 'news-stacked';
+    stackWrapper.id = 'newsStacked';
+
+    maxItems.slice(3).forEach(item => {
+      stackWrapper.appendChild(item);
+    });
+
+    container.insertBefore(stackWrapper, toggleWrapper);
+    toggleWrapper.style.display = 'block';
+  } else {
+    toggleWrapper.style.display = 'none';
+  }
+}
+
 
     // お知らせスタックの開閉
     function toggleNews() {
