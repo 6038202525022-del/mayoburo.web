@@ -705,6 +705,214 @@
         padding: 20px 16px;
       }
     }
+
+    /* ----------------------------------
+       ニュースセクション (今日のニュース & 今週のまとめ)
+    ---------------------------------- */
+    .news-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .news-status-badge {
+      background-color: var(--matcha-light);
+      color: var(--matcha);
+      font-size: 0.8rem;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid var(--border-color);
+    }
+
+    .news-status-dot {
+      width: 8px;
+      height: 8px;
+      background-color: #22c55e;
+      border-radius: 50%;
+      display: inline-block;
+      animation: blinkDot 1.5s infinite ease-in-out;
+    }
+
+    @keyframes blinkDot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .news-block-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-main);
+      font-weight: bold;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-left: 4px solid var(--matcha);
+      padding-left: 10px;
+    }
+
+    /* 今日の注目ニュース 3選 */
+    .today-news-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .today-news-card {
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(74, 59, 50, 0.04);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .today-news-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--matcha);
+      box-shadow: 0 6px 18px rgba(74, 59, 50, 0.08);
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background-color: var(--matcha);
+      color: #ffffff;
+      font-size: 0.8rem;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .rank-badge.top1 {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+    }
+
+    .today-news-cat {
+      font-size: 0.75rem;
+      color: var(--matcha);
+      font-weight: bold;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .today-news-title {
+      font-size: 0.95rem;
+      color: var(--text-main);
+      font-weight: bold;
+      line-height: 1.6;
+      margin-bottom: 12px;
+      padding-right: 24px;
+    }
+
+    .today-news-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: var(--text-sub);
+      border-top: 1px dashed var(--border-color);
+      padding-top: 10px;
+    }
+
+    .news-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--matcha);
+      font-weight: bold;
+      font-size: 0.8rem;
+      transition: color 0.2s ease;
+    }
+
+    .news-link-btn:hover {
+      color: var(--matcha-hover);
+      text-decoration: underline;
+    }
+
+    /* 今週のニュース（過去6日分） */
+    .weekly-news-list {
+      background-color: #ffffff;
+      border-radius: 12px;
+      border: 1px solid var(--border-color);
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(74, 59, 50, 0.03);
+    }
+
+    .weekly-news-item {
+      display: flex;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border-color);
+      gap: 16px;
+      transition: background-color 0.2s ease;
+    }
+
+    .weekly-news-item:last-child {
+      border-bottom: none;
+    }
+
+    .weekly-news-item:hover {
+      background-color: var(--matcha-light);
+    }
+
+    .weekly-date-badge {
+      background-color: var(--bg-card);
+      border: 1px solid var(--border-color);
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      color: var(--text-sub);
+      font-weight: bold;
+      white-space: nowrap;
+      text-align: center;
+      min-width: 90px;
+    }
+
+    .weekly-news-content {
+      flex: 1;
+    }
+
+    .weekly-news-title {
+      font-size: 0.9rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .weekly-views-count {
+      font-size: 0.75rem;
+      color: var(--matcha);
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .weekly-news-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+      }
+      .weekly-date-badge {
+        min-width: auto;
+      }
+    }
   </style>
 </head>
 <body>
@@ -847,6 +1055,49 @@
       </div>
     </section>
 
+    <!-- ニュースセクション（注目記事 TOP3 & 今週のまとめ） -->
+    <section id="daily-news" class="fade-in">
+      <div class="container">
+        <h2 class="section-title">ニュース・トレンド</h2>
+
+        <!-- ヘッダー情報（定時更新表示） -->
+        <div class="news-section-header">
+          <div class="news-status-badge">
+            <span class="news-status-dot"></span>
+            <span id="nextUpdateNotice">自動更新: 朝 7:00 / 15:00</span>
+          </div>
+          <span style="font-size:0.8rem; color:var(--text-sub);" id="newsLastUpdated">更新状況: 最新情報取得完了</span>
+        </div>
+
+        <!-- 今日の注目ニュース (TOP 3) -->
+        <div class="news-block-subtitle">
+          <span>🔥</span> 今日の注目ニュース（アクセス順 TOP 3）
+        </div>
+        <div class="today-news-grid" id="todayNewsGrid">
+          <!-- Dynamic News Cards rendered via JS -->
+        </div>
+
+        <!-- 今週のニュース（過去6日分の1位） - 折りたたみスタック構造 -->
+        <div class="news-block-subtitle" style="margin-top: 24px;">
+          <span>📅</span> 今週のデイリー話題まとめ（過去6日間）
+        </div>
+        <div class="weekly-news-wrapper">
+          <div class="news-stacked" id="weeklyNewsStacked">
+            <div class="weekly-news-list" id="weeklyNewsList">
+              <!-- Dynamic Weekly Items rendered via JS -->
+            </div>
+          </div>
+          <div class="news-toggle-wrapper" style="margin-top: 12px;">
+            <button class="news-toggle-btn" id="weeklyNewsToggleBtn" onclick="toggleWeeklyNews()">
+              <span id="weeklyBtnText">今週のまとめを見る</span>
+              <span class="arrow">▼</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
     <!-- ご意見・お問い合わせ (サイト内意見箱 & スパム保護) -->
     <section id="contact" class="fade-in">
       <div class="container">
@@ -929,50 +1180,26 @@
   <script>
     // サンプル初期投稿データ
     const DEFAULT_OPINIONS = [
-      {
-        id: 1,
-        name: "温泉好きマヨ",
-        category: "ご意見・ご感想",
-        message: "世界観がかわいくて癒やされます！応援しています。",
-        date: "2026/10/30 18:20",
-        clientId: "sample-user-1"
-      },
-      {
-        id: 2,
-        name: "名無しさん",
-        category: "不具合報告",
-        message: "Ver 3.0のアプデありがとうございます！楽しく遊んでます。",
-        date: "2026/10/30 20:05",
-        clientId: "sample-user-2"
-      }
+      { id: 1, name: "うま好き", category: "ご意見・ご感想", message: "HORSE.GAMEめっちゃ面白いです！友達と盛り上がりました。", date: "2026/10/30 14:20", clientId: "sample1" },
+      { id: 2, name: "匿名マヨ", category: "不具合報告", message: "スマホでアクセスした際に、画面の右側が少しはみ出します。", date: "2026/10/29 18:05", clientId: "sample2" }
     ];
 
-    // 安全なLocalStorageアクセス (Chromebook/保護ブラウザ対応)
+    // ローカルストレージ安全アクセス関数
     function safeGetStorage(key) {
-      try {
-        return localStorage.getItem(key);
-      } catch (e) {
-        return null;
-      }
+      try { return localStorage.getItem(key); } catch (e) { return null; }
     }
-
-    function safeSetStorage(key, value) {
-      try {
-        localStorage.setItem(key, value);
-      } catch (e) {}
+    function safeSetStorage(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) {}
     }
-
     function safeRemoveStorage(key) {
-      try {
-        localStorage.removeItem(key);
-      } catch (e) {}
+      try { localStorage.removeItem(key); } catch (e) {}
     }
 
-    // ブラウザ固有のクライアントID（同一送信元判定用）
+    // 疑似クライアントIDの取得または生成
     function getClientId() {
       let id = safeGetStorage('mayo_client_id');
       if (!id) {
-        id = 'client_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+        id = 'user_' + Math.random().toString(36).substring(2, 11) + Date.now().toString(36);
         safeSetStorage('mayo_client_id', id);
       }
       return id;
@@ -994,12 +1221,119 @@
       // お知らせ一覧の自動スタック構成化
       setupNewsStack();
 
+      // ニュースセクションの初期化と定時更新タイマー設定
+      initNewsFeed();
+
       // 意見箱の描画
       renderOpinions();
 
       // 初期制限状態チェック
       updateStickerDisplay();
     });
+
+    /* ----------------------------------
+       ニュースセクション (今日のTOP3 + 今週6日間まとめ + 7:00 / 15:00 定時更新)
+    ---------------------------------- */
+    const NEWS_DATABASE = {
+      today: [
+        { id: 1, rank: 1, title: "次世代AIモデルが正式発表、処理速度が大幅に向上", cat: "テクノロジー", views: "142,500 PV", date: "今日", url: "https://news.yahoo.co.jp/search?p=次世代AIモデル" },
+        { id: 2, rank: 2, title: "今週末の秋の連休、全国的に行楽日和に恵まれる見込み", cat: "天気・生活", views: "98,300 PV", date: "今日", url: "https://news.yahoo.co.jp/search?p=秋の連休+天気" },
+        { id: 3, rank: 3, title: "人気競馬ゲームアプリで秋の大感謝祭イベント開催決定", cat: "ゲーム", views: "85,100 PV", date: "今日", url: "https://news.yahoo.co.jp/search?p=競馬ゲーム+イベント" }
+      ],
+      weekly: [
+        { date: "10/29 (木)", title: "ゲーム業界の秋の新作ラインナップが解禁、ユーザーから大きな期待", cat: "ゲーム", views: "120,400 PV", url: "https://news.yahoo.co.jp/search?p=ゲーム業界+秋の新作" },
+        { date: "10/28 (水)", title: "新設のデジタル公共インフラが稼働開始、手続きがよりスムーズに", cat: "社会", views: "115,200 PV", url: "https://news.yahoo.co.jp/search?p=デジタル公共インフラ" },
+        { date: "10/27 (火)", title: "今年の紅葉前線が急速に南下、名所では例年以上の賑わい", cat: "季節・トレンド", views: "99,800 PV", url: "https://news.yahoo.co.jp/search?p=紅葉前線" },
+        { date: "10/26 (月)", title: "プロ野球ドラフト会議が開催、注目の新人が各球団指名を受ける", cat: "スポーツ", views: "135,600 PV", url: "https://news.yahoo.co.jp/search?p=プロ野球ドラフト会議" },
+        { date: "10/25 (日)", title: "世界最大級のゲームコンテスト開幕、注目作が多数出展", cat: "エンタメ", views: "108,900 PV", url: "https://news.yahoo.co.jp/search?p=ゲームコンテスト" },
+        { date: "10/24 (土)", title: "秋の健康長寿キャンペーン実施中、適度な温泉浴が注目される", cat: "ヘルスケア", views: "87,400 PV", url: "https://news.yahoo.co.jp/search?p=温泉浴+健康" }
+      ]
+    };
+
+    function renderNewsSection() {
+      const todayGrid = document.getElementById('todayNewsGrid');
+      const weeklyList = document.getElementById('weeklyNewsList');
+
+      if (todayGrid) {
+        todayGrid.innerHTML = NEWS_DATABASE.today.map(item => `
+          <div class="today-news-card" onclick="window.open('${item.url}', '_blank', 'noopener')">
+            <span class="rank-badge ${item.rank === 1 ? 'top1' : ''}">${item.rank}</span>
+            <div>
+              <span class="today-news-cat">${escapeHtml(item.cat)}</span>
+              <div class="today-news-title">${escapeHtml(item.title)}</div>
+            </div>
+            <div class="today-news-meta">
+              <span>${escapeHtml(item.views)}</span>
+              <a href="${item.url}" target="_blank" rel="noopener" class="news-link-btn" onclick="event.stopPropagation();">
+                <span>記事を開く</span>
+                <span>↗</span>
+              </a>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      if (weeklyList) {
+        weeklyList.innerHTML = NEWS_DATABASE.weekly.map(item => `
+          <div class="weekly-news-item" onclick="window.open('${item.url}', '_blank', 'noopener')">
+            <span class="weekly-date-badge">${escapeHtml(item.date)}</span>
+            <div class="weekly-news-content">
+              <span style="font-size:0.75rem; color:var(--matcha); font-weight:bold;">[${escapeHtml(item.cat)}] 関心度1位</span>
+              <div class="weekly-news-title">${escapeHtml(item.title)}</div>
+            </div>
+            <div style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">
+              <span class="weekly-views-count">${escapeHtml(item.views)}</span>
+              <a href="${item.url}" target="_blank" rel="noopener" class="news-link-btn" style="font-size:0.75rem;" onclick="event.stopPropagation();">
+                <span>元記事を見る ↗</span>
+              </a>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      const now = new Date();
+      const updatedStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')} 更新済`;
+      const lastUpdatedElem = document.getElementById('newsLastUpdated');
+      if (lastUpdatedElem) lastUpdatedElem.textContent = `最終更新: ${updatedStr}`;
+    }
+
+    // 今週のまとめの開閉制御
+    function toggleWeeklyNews() {
+      const stacked = document.getElementById('weeklyNewsStacked');
+      const toggleBtn = document.getElementById('weeklyNewsToggleBtn');
+      const btnText = document.getElementById('weeklyBtnText');
+
+      if (!stacked) return;
+
+      const isOpen = stacked.classList.toggle('is-open');
+      toggleBtn.classList.toggle('is-open');
+
+      if (isOpen) {
+        btnText.textContent = '閉じる';
+      } else {
+        btnText.textContent = '今週のまとめを見る';
+      }
+    }
+
+    function initNewsFeed() {
+      renderNewsSection();
+      scheduleNewsAutoUpdate();
+    }
+
+    // 朝 7:00 / 15:00 の自動更新スケジューラー
+    function scheduleNewsAutoUpdate() {
+      setInterval(() => {
+        const now = new Date();
+        const hours = now.getHours();
+        const minutes = now.getMinutes();
+        const seconds = now.getSeconds();
+
+        // 7時00分00秒 または 15時00分00秒のタイミングで更新
+        if ((hours === 7 || hours === 15) && minutes === 0 && seconds === 0) {
+          renderNewsSection();
+        }
+      }, 1000);
+    }
 
     // お知らせを最新3件＋残りはスタック枠に自動振り分け
     function setupNewsStack() {
