@@ -817,12 +817,26 @@
       background: linear-gradient(135deg, #f59e0b, #d97706);
     }
 
+    .today-news-header-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .today-news-date {
+      font-size: 0.75rem;
+      color: var(--text-sub);
+      background-color: var(--bg-card);
+      padding: 2px 8px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+    }
+
     .today-news-cat {
       font-size: 0.75rem;
       color: var(--matcha);
       font-weight: bold;
-      margin-bottom: 8px;
-      display: inline-block;
     }
 
     .today-news-title {
@@ -1034,18 +1048,22 @@
     <section id="news" class="fade-in">
       <div class="container">
         <h2 class="section-title">アップデート・お知らせ</h2>
-        
+
+        <!-- ★この一番上（1つ目）の news-list だけを残します -->
         <div class="news-list" id="newsContainer">
+
           <div class="news-item" onclick="openNewsModal(this)">
             <span class="news-date">2026.10.31</span>
-            <span class="news-tag">アプデ</span>
+            <span class="news-tag update">アプデ</span>
             <div class="news-title">Ver 3.1 新機能の追加</div>
             <template class="news-detail-template">
               <p>ゴール前で特定の場合のみズームアップするようにしました<br>ランKINGを導入しました見やすさが増大</p>
               <p>不具合やご意見は本サイトのお問い合わせフォームよりお寄せください。<br>がんばりたまふありけり</p>
             </template>
           </div>
-          
+
+          <!-- ❌ ここにあった2つ目の <div class="news-list" id="newsContainer"> は削除 -->
+
           <div class="news-item" onclick="openNewsModal(this)">
             <span class="news-date">2026.10.31</span>
             <span class="news-tag">お知らせ</span>
@@ -1056,8 +1074,8 @@
             </template>
           </div>
 
+          <!-- ❌ ここにあった3つ目の <div class="news-list" id="newsContainer"> も削除 -->
 
-     
           <div class="news-item" onclick="openNewsModal(this)">
             <span class="news-date">2026.10.30</span>
             <span class="news-tag">お知らせ</span>
@@ -1187,6 +1205,19 @@
           </div>
         </div>
 
+        <!-- ニュース理解を深めるキーワード・ミニ解説（ニュースセクション内に配置） -->
+        <div class="news-block-subtitle" style="margin-top: 36px;">
+          本日のニュースキーワード・解説クイズ
+        </div>
+        <div class="contact-card" style="margin-bottom: 0; background-color: var(--matcha-light); border-color: var(--matcha);">
+          <div id="newsQuizContainer">
+            <div style="font-size:0.8rem; color:var(--matcha); font-weight:bold; margin-bottom:6px;">本日ピックアップ用語</div>
+            <h3 style="font-size:1.1rem; color:var(--text-main); margin-bottom:12px;" id="quizQuestion">ニュース用語の学習中...</h3>
+            <div id="quizOptions" style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px;"></div>
+            <div id="quizFeedback" style="font-size:0.9rem; font-weight:bold; color:var(--text-main);"></div>
+          </div>
+        </div>
+
       </div>
     </section>
 
@@ -1282,17 +1313,17 @@
 
     const NEWS_DATABASE = {
       today: [
-        { id: 1, rank: 1, title: "次世代AIモデルが正式発表、処理速度が大幅に向上", cat: "テクノロジー", views: "142,500 PV", date: "今日", url: "https://news.yahoo.co.jp/search?p=次世代AIモデル" },
-        { id: 2, rank: 2, title: "今週末の秋の連休、全国的に行楽日和に恵まれる見込み", cat: "天気・生活", views: "98,300 PV", date: "今日", url: "https://news.yahoo.co.jp/search?p=秋の連休+天気" },
-        { id: 3, rank: 3, title: "人気競馬ゲームアプリで秋の大感謝祭イベント開催決定", cat: "ゲーム", views: "85,100 PV", date: "今日", url: "https://news.yahoo.co.jp/search?p=競馬ゲーム+イベント" }
+        { id: 1, rank: 1, title: "次世代AIモデルが正式発表、処理速度が大幅に向上", cat: "テクノロジー", views: "142,500 PV", date: "10/31 15:00", url: "https://news.yahoo.co.jp/search?p=次世代AIモデル" },
+        { id: 2, rank: 2, title: "今週末の秋の連休、全国的に行楽日和に恵まれる見込み", cat: "天気・生活", views: "98,300 PV", date: "10/31 14:30", url: "https://news.yahoo.co.jp/search?p=秋の連休+天気" },
+        { id: 3, rank: 3, title: "世界的な脱炭素化の新たな取り組み案が発表、環境意識が高まる", cat: "環境・科学", views: "85,100 PV", date: "10/31 12:00", url: "https://news.yahoo.co.jp/search?p=脱炭素化+環境" }
       ],
       weekly: [
-        { date: "10/29 (木)", title: "ゲーム業界の秋の新作ラインナップが解禁、ユーザーから大きな期待", cat: "ゲーム", views: "120,400 PV", url: "https://news.yahoo.co.jp/search?p=ゲーム業界+秋の新作" },
-        { date: "10/28 (水)", title: "新設のデジタル公共インフラが稼働開始、手続きがよりスムーズに", cat: "社会", views: "115,200 PV", url: "https://news.yahoo.co.jp/search?p=デジタル公共インフラ" },
-        { date: "10/27 (火)", title: "今年の紅葉前線が急速に南下、名所では例年以上の賑わい", cat: "季節・トレンド", views: "99,800 PV", url: "https://news.yahoo.co.jp/search?p=紅葉前線" },
-        { date: "10/26 (月)", title: "プロ野球ドラフト会議が開催、注目の新人が各球団指名を受ける", cat: "スポーツ", views: "135,600 PV", url: "https://news.yahoo.co.jp/search?p=プロ野球ドラフト会議" },
-        { date: "10/25 (日)", title: "世界最大級のゲームコンテスト開幕、注目作が多数出展", cat: "エンタメ", views: "108,900 PV", url: "https://news.yahoo.co.jp/search?p=ゲームコンテスト" },
-        { date: "10/24 (土)", title: "秋の健康長寿キャンペーン実施中、適度な温泉浴が注目される", cat: "ヘルスケア", views: "87,400 PV", url: "https://news.yahoo.co.jp/search?p=温泉浴+健康" }
+        { date: "10/30 (金)", title: "国内の最新宇宙探査プロジェクトが発足、未知の観測に挑戦", cat: "科学", views: "120,400 PV", url: "https://news.yahoo.co.jp/search?p=宇宙探査プロジェクト" },
+        { date: "10/29 (木)", title: "新設のデジタル公共インフラが稼働開始、手続きがよりスムーズに", cat: "社会", views: "115,200 PV", url: "https://news.yahoo.co.jp/search?p=デジタル公共インフラ" },
+        { date: "10/28 (水)", title: "今年の紅葉前線が急速に南下、名所では例年以上の賑わい", cat: "季節・トレンド", views: "99,800 PV", url: "https://news.yahoo.co.jp/search?p=紅葉前線" },
+        { date: "10/27 (火)", title: "プロ野球ドラフト会議が開催、注目の新人が各球団指名を受ける", cat: "スポーツ", views: "135,600 PV", url: "https://news.yahoo.co.jp/search?p=プロ野球ドラフト会議" },
+        { date: "10/26 (月)", title: "世界的な文化交流フェスティバル開幕、伝統芸能が脚光を浴びる", cat: "文化・芸術", views: "108,900 PV", url: "https://news.yahoo.co.jp/search?p=文化交流フェスティバル" },
+        { date: "10/25 (日)", title: "秋の健康長寿キャンペーン実施中、適度な温泉浴が注目される", cat: "ヘルスケア", views: "87,400 PV", url: "https://news.yahoo.co.jp/search?p=温泉浴+健康" }
       ]
     };
 
@@ -1324,6 +1355,27 @@
       {
         title: "シュークリームの「シュー」はフランス語でキャベツ",
         body: "シュークリーム（Chou à la crème）の「シュー（Chou）」はフランス語で「キャベツ」という意味です。焼き上がった生地の丸くてゴツゴツした形がキャベツに似ていることから名付けられました。"
+      }
+    ];
+
+    const NEWS_QUIZ_LIST = [
+      {
+        question: "【テクノロジー用語】「次世代AI」に関するニュースで注目される、人間の質問に自然に応答するプログラムを何と呼ぶ？",
+        options: ["LLM（大規模言語モデル）", "GPS（位置情報システム）", "CPU（中央処理装置）"],
+        answer: 0,
+        explanation: "正解！LLM（Large Language Model）は膨大な文章データを学習し、人間のように自然な対話ができるAI技術です。"
+      },
+      {
+        question: "【時事・社会用語】デジタル公共インフラなどで活用が進む、個人の身元を電子的に証明する仕組みを何と呼ぶ？",
+        options: ["電子署名・ID認証", "ファイヤーウォール", "ドメインネーム"],
+        answer: 0,
+        explanation: "正解！電子IDやデジタル証明書を使うことで、行政手続きやオンライン取引が安全・迅速に行えます。"
+      },
+      {
+        question: "【気象・季節用語】秋に紅葉が北から南へ順に色づいていく前線の移動を何と呼ぶ？",
+        options: ["紅葉前線", "桜前線", "梅雨前線"],
+        answer: 0,
+        explanation: "正解！春の桜前線とは逆で、秋の紅葉前線は気温の低下とともに北から南へ降りてきます。"
       }
     ];
 
@@ -1372,7 +1424,38 @@
       initNewsFeed();
       renderOpinions();
       updateStickerDisplay();
+      initNewsQuiz();
     });
+
+    function initNewsQuiz() {
+      const q = NEWS_QUIZ_LIST[Math.floor(Math.random() * NEWS_QUIZ_LIST.length)];
+      const qElem = document.getElementById('quizQuestion');
+      const optElem = document.getElementById('quizOptions');
+      const fbElem = document.getElementById('quizFeedback');
+
+      if (!qElem || !optElem) return;
+
+      qElem.textContent = q.question;
+      fbElem.textContent = '';
+      optElem.innerHTML = q.options.map((opt, i) => `
+        <button onclick="checkNewsQuiz(${i}, ${q.answer}, '${escapeHtml(q.explanation)}')" style="text-align:left; padding:10px 14px; border:1px solid var(--matcha); border-radius:8px; background:#ffffff; color:var(--text-main); font-family:inherit; cursor:pointer; font-size:0.9rem; transition:background 0.2s ease;">
+          ${i + 1}. ${escapeHtml(opt)}
+        </button>
+      `).join('');
+    }
+
+    function checkNewsQuiz(selected, correct, explanation) {
+      const fbElem = document.getElementById('quizFeedback');
+      if (!fbElem) return;
+
+      if (selected === correct) {
+        fbElem.style.color = '#22c55e';
+        fbElem.innerHTML = `温泉マーク獲得 ♨ <br>${explanation}`;
+      } else {
+        fbElem.style.color = '#c53030';
+        fbElem.textContent = 'ざんねん！もう一度チャレンジしてみよう。';
+      }
+    }
 
     function renderNewsSection() {
       const todayGrid = document.getElementById('todayNewsGrid');
@@ -1383,7 +1466,10 @@
           <div class="today-news-card" onclick="window.open('${item.url}', '_blank', 'noopener')">
             <span class="rank-badge ${item.rank === 1 ? 'top1' : ''}">${item.rank}</span>
             <div>
-              <span class="today-news-cat">${escapeHtml(item.cat)}</span>
+              <div class="today-news-header-info">
+                <span class="today-news-date">${escapeHtml(item.date)}</span>
+                <span class="today-news-cat">${escapeHtml(item.cat)}</span>
+              </div>
               <div class="today-news-title">${escapeHtml(item.title)}</div>
             </div>
             <div class="today-news-meta">
@@ -1416,7 +1502,7 @@
       }
 
       const now = new Date();
-      const updatedStr = `${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')} 更新済`;
+      const updatedStr = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours()}:${String(now.getMinutes()).padStart(2, '0')} 更新済`;
       const lastUpdatedElem = document.getElementById('newsLastUpdated');
       if (lastUpdatedElem) lastUpdatedElem.textContent = `最終更新: ${updatedStr}`;
     }
@@ -1439,195 +1525,229 @@
     }
 
     function initNewsFeed() {
-      renderNewsSection();
+      // 起動時に最新のニュースをフェッチ
+      fetchRealtimeNews();
       scheduleNewsAutoUpdate();
     }
 
+    let lastUpdatedHour = -1;
+
     function scheduleNewsAutoUpdate() {
+      // 1秒ごとにチェックし、6:00, 14:00, 20:00 の定時自動更新を実行
       setInterval(() => {
         const now = new Date();
         const hours = now.getHours();
         const minutes = now.getMinutes();
-        const seconds = now.getSeconds();
 
-        if ((hours === 6 || hours === 14 || hours === 20) && minutes === 0 && seconds === 0) {
-          renderNewsSection();
+        if ((hours === 6 || hours === 14 || hours === 20) && minutes === 0) {
+          if (lastUpdatedHour !== hours) {
+            lastUpdatedHour = hours;
+            fetchRealtimeNews();
+          }
         }
       }, 1000);
     }
 
-    function setupNewsStack() {
-      const container = document.getElementById('newsContainer');
-      const toggleWrapper = document.getElementById('newsToggleWrapper');
-      if (!container) return;
+    // リアルタイム外部ニュース自動取得・日付挿入関数
+    async function fetchRealtimeNews() {
+      const lastUpdatedElem = document.getElementById('newsLastUpdated');
+      if (lastUpdatedElem) lastUpdatedElem.textContent = '更新状況: 最新ニュースを取得中...';
 
-      const items = Array.from(container.querySelectorAll('.news-item'));
-      const maxItems = items.slice(0, 10);
+      const now = new Date();
+      const month = now.getMonth() + 1;
+      const date = now.getDate();
+      const hourStr = String(now.getHours()).padStart(2, '0');
+      const minStr = String(now.getMinutes()).padStart(2, '0');
+      const currentDateTag = `${month}/${date} ${hourStr}:${minStr}`;
 
-      container.innerHTML = '';
+      try {
+        const rssUrl = 'https://news.yahoo.co.jp/rss/topics/top-picks.xml';
+        const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(rssUrl)}`;
+        
+        const response = await fetch(proxyUrl);
+        if (!response.ok) throw new Error('Fetch failed');
+        const data = await response.json();
 
-      maxItems.slice(0, 3).forEach(item => {
-        container.appendChild(item);
-      });
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+        const items = Array.from(xmlDoc.querySelectorAll("item")).slice(0, 3);
 
-      if (maxItems.length > 3) {
-        const stackWrapper = document.createElement('div');
-        stackWrapper.className = 'news-stacked';
-        stackWrapper.id = 'newsStacked';
+        if (items.length >= 3) {
+          NEWS_DATABASE.today = items.map((item, index) => {
+            const title = item.querySelector("title")?.textContent || "最新ニュース";
+            const link = item.querySelector("link")?.textContent || "https://news.yahoo.co.jp/";
+            const pubDateRaw = item.querySelector("pubDate")?.textContent;
+            let dateDisplay = currentDateTag;
 
-        maxItems.slice(3).forEach(item => {
-          stackWrapper.appendChild(item);
+            if (pubDateRaw) {
+              const pDate = new Date(pubDateRaw);
+              if (!isNaN(pDate.getTime())) {
+                dateDisplay = `${pDate.getMonth() + 1}/${pDate.getDate()} ${String(pDate.getHours()).padStart(2, '0')}:${String(pDate.getMinutes()).padStart(2, '0')}`;
+              }
+            }
+
+            return {
+              id: index + 1,
+              rank: index + 1,
+              title: title,
+              cat: "速報・トレンド",
+              views: `${(150 - index * 20).toLocaleString()}k PV`,
+              date: dateDisplay,
+              url: link
+            };
+          });
+        }
+      } catch (err) {
+        console.log("リアルタイム取得のバックアップフォールバックを使用します", err);
+        NEWS_DATABASE.today.forEach((item) => {
+          item.date = currentDateTag;
         });
-
-        container.appendChild(stackWrapper);
-        if (toggleWrapper) toggleWrapper.style.display = 'block';
-      } else {
-        if (toggleWrapper) toggleWrapper.style.display = 'none';
       }
+
+      renderNewsSection();
+    }
+
+    function setupNewsStack() {
+      const newsContainer = document.getElementById('newsContainer');
+      const toggleBtn = document.getElementById('newsToggleBtn');
+      if (!newsContainer || !toggleBtn) return;
+
+      const items = newsContainer.querySelectorAll('.news-item');
+      if (items.length <= 3) {
+        document.getElementById('newsToggleWrapper').style.display = 'none';
+        return;
+      }
+
+      // 4件目以降を隠し用スタックラッパーで包む
+      const stackedWrapper = document.createElement('div');
+      stackedWrapper.className = 'news-stacked';
+      stackedWrapper.id = 'newsStackedWrapper';
+
+      for (let i = 3; i < items.length; i++) {
+        stackedWrapper.appendChild(items[i]);
+      }
+
+      newsContainer.after(stackedWrapper);
     }
 
     function toggleNews() {
-      const stackedNews = document.getElementById('newsStacked');
+      const stacked = document.getElementById('newsStackedWrapper');
       const toggleBtn = document.getElementById('newsToggleBtn');
       const btnText = document.getElementById('btnText');
 
-      if (!stackedNews) return;
+      if (!stacked) return;
 
-      const isOpen = stackedNews.classList.toggle('is-open');
+      const isOpen = stacked.classList.toggle('is-open');
       toggleBtn.classList.toggle('is-open');
 
       if (isOpen) {
-        btnText.textContent = '閉じる';
+        btnText.textContent = 'お知らせをたたむ';
       } else {
         btnText.textContent = '過去のお知らせをすべて見る';
       }
     }
 
+    /* ----------------------------------
+       お知らせモーダル制御
+    ---------------------------------- */
     function openNewsModal(element) {
       const date = element.querySelector('.news-date').textContent;
-      const tag = element.querySelector('.news-tag');
+      const tagElement = element.querySelector('.news-tag');
+      const tagText = tagElement.textContent;
       const title = element.querySelector('.news-title').textContent;
       const template = element.querySelector('.news-detail-template');
 
       document.getElementById('modalDate').textContent = date;
-      
       const modalTag = document.getElementById('modalTag');
-      modalTag.textContent = tag.textContent;
-      modalTag.className = tag.className;
+      modalTag.textContent = tagText;
+      modalTag.className = tagElement.className;
 
       document.getElementById('modalTitle').textContent = title;
-      document.getElementById('modalBody').innerHTML = template ? template.innerHTML : '<p>詳細はありません。</p>';
 
-      const modal = document.getElementById('newsModal');
-      modal.classList.add('is-active');
+      const modalBody = document.getElementById('modalBody');
+      if (template) {
+        modalBody.innerHTML = template.innerHTML;
+      } else {
+        modalBody.innerHTML = '<p>詳細情報はありません。</p>';
+      }
+
+      document.getElementById('newsModal').classList.add('is-active');
       document.body.style.overflow = 'hidden';
     }
 
-    function closeNewsModal(event, forceClose = false) {
-      if (forceClose || event.target.id === 'newsModal') {
-        const modal = document.getElementById('newsModal');
-        modal.classList.remove('is-active');
+    function closeNewsModal(event, force = false) {
+      if (force || event.target.id === 'newsModal') {
+        document.getElementById('newsModal').classList.remove('is-active');
         document.body.style.overflow = '';
       }
     }
 
+    /* ----------------------------------
+       雑学モーダル制御
+    ---------------------------------- */
     function openTriviaModal() {
-      showRandomTrivia();
-      const modal = document.getElementById('triviaModal');
-      if (modal) {
-        modal.classList.add('is-active');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function showRandomTrivia() {
       const randomIndex = Math.floor(Math.random() * TRIVIA_LIST.length);
       const trivia = TRIVIA_LIST[randomIndex];
-      
-      const titleElem = document.getElementById('triviaTitle');
-      const bodyElem = document.getElementById('triviaBody');
-      
-      if (titleElem) titleElem.textContent = trivia.title;
-      if (bodyElem) bodyElem.textContent = trivia.body;
+
+      document.getElementById('triviaTitle').textContent = trivia.title;
+      document.getElementById('triviaBody').textContent = trivia.body;
+
+      document.getElementById('triviaModal').classList.add('is-active');
+      document.body.style.overflow = 'hidden';
     }
 
-    function closeTriviaModal(event, forceClose = false) {
-      if (forceClose || event.target.id === 'triviaModal') {
-        const modal = document.getElementById('triviaModal');
-        if (modal) {
-          modal.classList.remove('is-active');
-          document.body.style.overflow = '';
-        }
+    function closeTriviaModal(event, force = false) {
+      if (force || event.target.id === 'triviaModal') {
+        document.getElementById('triviaModal').classList.remove('is-active');
+        document.body.style.overflow = '';
       }
     }
 
-    function getStoredOpinions() {
-      const data = safeGetStorage('mayo_opinions');
-      let opinions = DEFAULT_OPINIONS;
-      if (data) {
-        try {
-          opinions = JSON.parse(data);
-        } catch (e) {
-          opinions = DEFAULT_OPINIONS;
-        }
+    /* ----------------------------------
+       意見箱・スパム制限ロジック
+    ---------------------------------- */
+    const SPAM_LIMIT_TIME = 10 * 60 * 1000; // 10分間
+
+    function getLocalOpinions() {
+      const saved = safeGetStorage('mayo_opinions');
+      if (saved) {
+        try { return JSON.parse(saved); } catch (e) {}
       }
-      return opinions;
+      return DEFAULT_OPINIONS;
     }
 
-    function getSubmitHistory() {
-      const data = safeGetStorage('mayo_submit_history');
-      return data ? JSON.parse(data) : [];
+    function saveLocalOpinions(opinions) {
+      safeSetStorage('mayo_opinions', JSON.stringify(opinions));
     }
 
-    function setBlockUntil(minutes, reasonText) {
-      const blockTime = Date.now() + minutes * 60 * 1000;
-      safeSetStorage('mayo_block_until', blockTime.toString());
-      if (reasonText) {
-        safeSetStorage('mayo_block_reason', reasonText);
+    function checkSpamRestriction() {
+      const myId = getClientId();
+      const lastSubmit = safeGetStorage('mayo_last_submit_' + myId);
+      if (!lastSubmit) return null;
+
+      const elapsed = Date.now() - parseInt(lastSubmit, 10);
+      if (elapsed < SPAM_LIMIT_TIME) {
+        const remainingMs = SPAM_LIMIT_TIME - elapsed;
+        const remainingMin = Math.ceil(remainingMs / 60000);
+        return remainingMin;
       }
-    }
-
-    function checkBlockStatus() {
-      const blockTime = safeGetStorage('mayo_block_until');
-      if (blockTime) {
-        const remainingMs = parseInt(blockTime, 10) - Date.now();
-        if (remainingMs > 0) {
-          return Math.ceil(remainingMs / (60 * 1000));
-        } else {
-          safeRemoveStorage('mayo_block_until');
-          safeRemoveStorage('mayo_block_reason');
-        }
-      }
-      return 0;
-    }
-
-    function showInlineStickerMsg(msg) {
-      const sticker = document.getElementById('spamWarningSticker');
-      const stickerText = document.getElementById('stickerText');
-      if (stickerText) stickerText.innerHTML = msg;
-      if (sticker) sticker.classList.add('is-active');
+      return null;
     }
 
     function updateStickerDisplay() {
       const sticker = document.getElementById('spamWarningSticker');
       const stickerText = document.getElementById('stickerText');
       const submitBtn = document.getElementById('opSubmitBtn');
-      const textarea = document.getElementById('opMessage');
+      const remainingMin = checkSpamRestriction();
 
-      const blockedMins = checkBlockStatus();
-      const customReason = safeGetStorage('mayo_block_reason') || '連投・パターン検知のため制限中';
-
-      if (blockedMins > 0) {
-        if (stickerText) {
-          stickerText.innerHTML = `${customReason}（解除まで あと約 <strong>${blockedMins} 分</strong>）`;
-        }
+      if (remainingMin !== null) {
         if (sticker) sticker.classList.add('is-active');
+        if (stickerText) stickerText.textContent = `連続投稿制限中です。あと約 ${remainingMin} 分でお知らせ・投稿が可能になります。`;
         if (submitBtn) {
           submitBtn.disabled = true;
-          submitBtn.style.opacity = '0.6';
+          submitBtn.style.opacity = '0.5';
           submitBtn.style.cursor = 'not-allowed';
         }
-        if (textarea) textarea.disabled = true;
       } else {
         if (sticker) sticker.classList.remove('is-active');
         if (submitBtn) {
@@ -1635,31 +1755,73 @@
           submitBtn.style.opacity = '1';
           submitBtn.style.cursor = 'pointer';
         }
-        if (textarea) textarea.disabled = false;
       }
     }
 
-    function renderOpinions() {
-      const opinionList = document.getElementById('opinionList');
-      if (!opinionList) return;
+    function handleOpinionSubmit(event) {
+      event.preventDefault();
 
-      const opinions = getStoredOpinions();
-
-      if (opinions.length === 0) {
-        opinionList.innerHTML = '<div class="opinion-empty">まだ投稿はありません。最初の意見を投稿してみましょう！</div>';
+      const remainingMin = checkSpamRestriction();
+      if (remainingMin !== null) {
+        updateStickerDisplay();
         return;
       }
 
-      opinionList.innerHTML = opinions.map(op => {
+      const category = document.getElementById('opCategory').value;
+      const nameInput = document.getElementById('opName').value.trim();
+      const message = document.getElementById('opMessage').value.trim();
+
+      if (!message) return;
+
+      const name = nameInput !== "" ? nameInput : "匿名マヨ";
+      const myId = getClientId();
+
+      const now = new Date();
+      const dateStr = `${now.getFullYear()}/${now.getMonth()+1}/${now.getDate()} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+      const opinions = getLocalOpinions();
+      const newOp = {
+        id: Date.now(),
+        name: name,
+        category: category,
+        message: message,
+        date: dateStr,
+        clientId: myId
+      };
+
+      opinions.unshift(newOp);
+      saveLocalOpinions(opinions);
+
+      safeSetStorage('mayo_last_submit_' + myId, Date.now().toString());
+
+      document.getElementById('opMessage').value = '';
+      document.getElementById('opName').value = '';
+
+      renderOpinions();
+      updateStickerDisplay();
+    }
+
+    function renderOpinions() {
+      const container = document.getElementById('opinionList');
+      if (!container) return;
+
+      const opinions = getLocalOpinions();
+
+      if (opinions.length === 0) {
+        container.innerHTML = '<div class="opinion-empty">まだ投稿はありません。</div>';
+        return;
+      }
+
+      container.innerHTML = opinions.map(op => {
         const isBug = op.category === '不具合報告';
         return `
           <div class="opinion-card">
             <div class="opinion-meta">
-              <div>
-                <span class="opinion-user">${escapeHtml(op.name || '匿名マヨ')}</span>
+              <span class="opinion-user">${escapeHtml(op.name)}</span>
+              <div style="display:flex; align-items:center; gap:8px;">
                 <span class="opinion-category ${isBug ? 'bug' : ''}">${escapeHtml(op.category)}</span>
+                <span>${escapeHtml(op.date)}</span>
               </div>
-              <span>${escapeHtml(op.date)}</span>
             </div>
             <div class="opinion-text">${escapeHtml(op.message)}</div>
           </div>
@@ -1667,102 +1829,8 @@
       }).join('');
     }
 
-    function handleOpinionSubmit(event) {
-      event.preventDefault();
-
-      const blockedMins = checkBlockStatus();
-      if (blockedMins > 0) {
-        updateStickerDisplay();
-        return;
-      }
-
-      const category = document.getElementById('opCategory').value;
-      const name = document.getElementById('opName').value.trim() || '匿名マヨ';
-      const message = document.getElementById('opMessage').value.trim();
-      const myClientId = getClientId();
-      const now = Date.now();
-
-      if (!message) return;
-
-      // 判定 1: 同じ文字が3文字続く場合
-      if (/(.)\1{2,}/.test(message)) {
-        showInlineStickerMsg('【スパム検知】同じ文字が3文字以上連続しています。投稿は拒否されました。');
-        return;
-      }
-
-      let opinions = getStoredOpinions();
-      let history = getSubmitHistory().filter(h => now - h.timestamp < 300000);
-
-      // 判定 5: 同じ言葉を連続で2個送った時は両方削除し5分間投稿不可
-      if (opinions.length > 0) {
-        const lastOp = opinions[0];
-        if (lastOp.clientId === myClientId && lastOp.message.trim() === message) {
-          opinions = opinions.filter(op => op.id !== lastOp.id);
-          safeSetStorage('mayo_opinions', JSON.stringify(opinions));
-          renderOpinions();
-
-          setBlockUntil(5, '同じ内容の連続投稿を検知');
-          updateStickerDisplay();
-          document.getElementById('opMessage').value = '';
-          return;
-        }
-      }
-
-      history.push({ timestamp: now, message: message, clientId: myClientId });
-      safeSetStorage('mayo_submit_history', JSON.stringify(history));
-
-      const myHistory10s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 10000);
-      const myHistory30s = history.filter(h => h.clientId === myClientId && now - h.timestamp <= 30000);
-
-      // 判定 3: 10秒間に3個以上送った場合 (2時間ブロック & 最初のスパム投稿含め全削除)
-      if (myHistory10s.length >= 3) {
-        const firstSpamTime = myHistory10s[0].timestamp;
-        opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
-        safeSetStorage('mayo_opinions', JSON.stringify(opinions));
-        renderOpinions();
-
-        setBlockUntil(120, '10秒間の連続送信（スパム）を検知');
-        updateStickerDisplay();
-        document.getElementById('opMessage').value = '';
-        return;
-      }
-
-      // 判定 2 & 4: 30秒間に5個以上送られた場合 (30分ブロック & 最初のスパム投稿含め全削除)
-      if (myHistory30s.length >= 5) {
-        const firstSpamTime = myHistory30s[0].timestamp;
-        opinions = opinions.filter(op => !(op.clientId === myClientId && op.id >= firstSpamTime));
-        safeSetStorage('mayo_opinions', JSON.stringify(opinions));
-        renderOpinions();
-
-        setBlockUntil(30, '短時間の大量送信を検知');
-        updateStickerDisplay();
-        document.getElementById('opMessage').value = '';
-        return;
-      }
-
-      // 正常投稿
-      const nowDate = new Date();
-      const dateStr = `${nowDate.getFullYear()}/${String(nowDate.getMonth() + 1).padStart(2, '0')}/${String(nowDate.getDate()).padStart(2, '0')} ${String(nowDate.getHours()).padStart(2, '0')}:${String(nowDate.getMinutes()).padStart(2, '0')}`;
-
-      const newOpinion = {
-        id: now,
-        name: name,
-        category: category,
-        message: message,
-        date: dateStr,
-        clientId: myClientId
-      };
-
-      opinions.unshift(newOpinion);
-      safeSetStorage('mayo_opinions', JSON.stringify(opinions));
-
-      document.getElementById('opMessage').value = '';
-      const sticker = document.getElementById('spamWarningSticker');
-      if (sticker) sticker.classList.remove('is-active');
-      renderOpinions();
-    }
-
     function escapeHtml(str) {
+      if (!str) return '';
       return String(str)
         .replace(/&/g, '&amp;')
         .replace(/</g, '&lt;')
